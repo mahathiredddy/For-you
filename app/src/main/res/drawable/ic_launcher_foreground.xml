@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Journey Trajectory Path -->
+    <path
+        android:pathData="M 34,74 C 34,60 46,54 58,48"
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    <path
+        android:pathData="M 34,74 C 34,60 46,54 58,48"
+        android:strokeColor="#93C5FD"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <!-- Starting Waypoint Node -->
+    <path
+        android:pathData="M 34,74 m -4,0 a 4,4 0 1,0 8,0 a 4,4 0 1,0 -8,0"
+        android:fillColor="#38BDF8" />
+    <path
+        android:pathData="M 34,74 m -2,0 a 2,2 0 1,0 4,0 a 2,2 0 1,0 -4,0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Intermediate Waypoint Node -->
+    <path
+        android:pathData="M 46,58 m -3,0 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0"
+        android:fillColor="#F59E0B" />
+
+    <!-- Prominent Dynamic Navigation Arrow pointing to destination -->
+    <path
+        android:pathData="M 50,62 L 64,52 L 56,46 Z"
+        android:fillColor="#E2E8F0" />
+    <path
+        android:pathData="M 50,62 L 56,46 L 46,52 Z"
+        android:fillColor="#CBD5E1" />
+
+    <!-- Radiant Goal Destination Star (Amber/Gold Star of Direction) -->
+    <!-- 4-point star centered at (68, 38) -->
+    <path
+        android:pathData="M 68,26 C 68,34 71,38 79,38 C 71,38 68,42 68,50 C 68,42 65,38 57,38 C 65,38 68,34 68,26 Z"
+        android:fillColor="#F59E0B" />
+    <!-- Inner bright star core -->
+    <path
+        android:pathData="M 68,31 C 68,36 70,38 75,38 C 70,38 68,40 68,45 C 68,40 66,38 61,38 C 66,38 68,36 68,31 Z"
+        android:fillColor="#FEF08A" />
+
+    <!-- Subtle beacon spark -->
+    <path
+        android:pathData="M 42,34 m -1.5,0 a 1.5,1.5 0 1,0 3,0 a 1.5,1.5 0 1,0 -3,0"
+        android:fillColor="#FCD34D" />
+</vector>

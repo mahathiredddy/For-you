@@ -1,0 +1,6 @@
+{
+  "name": "WE’RE HERE",
+  "description": "AI-powered personal goal execution platform that transforms any meaningful user goal into a personalized roadmap, daily actions, measurable progress, and continuously improved plans.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
