@@ -100,7 +100,8 @@ class AiBackendClient(
         val apiKey = effectiveApiKey
         if (apiKey.isBlank()) throw IllegalStateException("Gemini API key is missing.")
 
-        val url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=$apiKey"
+        // Use Google API header 'x-goog-api-key' instead of query parameter to prevent credential leakage
+        val url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
 
         val jsonBody = JSONObject().apply {
             val contents = JSONArray().apply {
@@ -121,7 +122,7 @@ class AiBackendClient(
                         put(JSONObject().apply {
                             put("text", systemInstruction)
                         })
-                    } )
+                    })
                 })
             }
 
@@ -134,18 +135,25 @@ class AiBackendClient(
 
         val request = Request.Builder()
             .url(url)
+            .addHeader("x-goog-api-key", apiKey)
             .post(jsonBody.toString().toRequestBody("application/json".toMediaType()))
             .build()
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) {
                 val errCode = response.code
-                val errBody = response.body?.string() ?: ""
-                throw IOException("Gemini API error ($errCode): $errBody")
+                val rawErrBody = response.body?.string() ?: ""
+                val safeErrBody = sanitize(rawErrBody, apiKey)
+                throw IOException("Gemini API error ($errCode): $safeErrBody")
             }
             val bodyString = response.body?.string() ?: throw IOException("Null response body")
             return extractTextFromGeminiResponse(bodyString)
         }
+    }
+
+    private fun sanitize(text: String, secret: String): String {
+        if (secret.isBlank() || text.isBlank()) return text
+        return text.replace(secret, "[REDACTED]")
     }
 
     private fun callCustomBackend(

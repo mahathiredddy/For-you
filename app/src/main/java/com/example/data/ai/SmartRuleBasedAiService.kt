@@ -414,16 +414,16 @@ class SmartRuleBasedAiService : AiService {
             }
             q.contains("falling behind") || q.contains("behind schedule") || q.contains("am i behind") -> {
                 val completionPercent = context.progressPercent
-                "Honest assessment: You are at **$completionPercent%** completion on $goalTitle with ${context.pendingTasksCount} pending tasks remaining. Life happens—falling behind initial calendars is normal. What matters is velocity, not guilt. We can recalibrate your deadline or trim secondary P2 tasks right now."
+                "Honest assessment: You are at **$completionPercent%** completion on $goalTitle with ${context.pendingTasksCount} pending tasks remaining. Life happens - falling behind initial calendars is normal. What matters is velocity, not guilt. We can recalibrate your deadline or trim secondary P2 tasks right now."
             }
             q.contains("break") || q.contains("smaller steps") -> {
                 "Here is how to break down **$topTask** into immediate micro-steps:\n\n1. **Step 1 (10 min):** Prepare inputs and define the output contract.\n2. **Step 2 (20 min):** Write the minimal happy-path implementation.\n3. **Step 3 (15 min):** Test with 2 edge cases and log results."
             }
             q.contains("recover") || q.contains("missed") -> {
-                "Recovery Protocol:\n1. Never try to 'make up' 3 days in a single 12-hour marathon—that leads to burnout.\n2. Clear missed task guilt: reschedule non-essential P2 items.\n3. Today, complete just **ONE** 30-minute P0 task to restart your streak.\n4. Log a quick check-in tonight."
+                "Recovery Protocol:\n1. Never try to 'make up' 3 days in a single 12-hour marathon - that leads to burnout.\n2. Clear missed task guilt: reschedule non-essential P2 items.\n3. Today, complete just **ONE** 30-minute P0 task to restart your streak.\n4. Log a quick check-in tonight."
             }
             q.contains("learn next") -> {
-                "Based on $goalTitle and your current skills (${context.currentSkills.ifBlank { "baseline" }}), focus your next learning block on: ${context.currentPhaseName ?: "Foundations"}. Avoid passive tutorials—build a working spike instead."
+                "Based on $goalTitle and your current skills (${context.currentSkills.ifBlank { "baseline" }}), focus your next learning block on: ${context.currentPhaseName ?: "Foundations"}. Avoid passive tutorials - build a working spike instead."
             }
             q.contains("explain") || q.contains("concept") -> {
                 "Tell me which specific concept or tool you'd like unpacked in the context of $goalTitle! I'll break down the mental model, why it matters, and a concrete example."

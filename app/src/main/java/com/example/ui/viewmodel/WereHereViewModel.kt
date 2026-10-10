@@ -59,8 +59,25 @@ class WereHereViewModel(application: Application) : AndroidViewModel(application
     val aiConnectionStatus: StateFlow<String> = prefs.aiConnectionStatus
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "OFFLINE_FALLBACK")
 
+    val syncManager = com.example.data.sync.FirestoreSyncManager(application, db)
+    val syncStatus: StateFlow<com.example.data.sync.SyncStatus> = syncManager.syncStatus
+
     private val _isTestingConnection = MutableStateFlow(false)
     val isTestingConnection: StateFlow<Boolean> = _isTestingConnection.asStateFlow()
+
+    fun triggerCloudSync(userId: String? = null, onComplete: (com.example.data.sync.SyncStatus) -> Unit = {}) {
+        viewModelScope.launch {
+            val result = syncManager.performSync(userId)
+            onComplete(result)
+        }
+    }
+
+    fun migrateGuestData(userId: String, onComplete: (Boolean) -> Unit = {}) {
+        viewModelScope.launch {
+            val success = syncManager.migrateGuestDataToUser(userId)
+            onComplete(success)
+        }
+    }
 
     init {
         viewModelScope.launch {

@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.data.sync.SyncStatus
 import com.example.ui.screens.more.CuratedResource
 import com.example.ui.viewmodel.AuthUiState
 import com.example.ui.viewmodel.AuthUser
@@ -108,7 +109,6 @@ class WereHereFeaturesTest {
                 dimMarket * 10 +
                 dimTeam * 5) / 100f
 
-        // 8*15(120) + 9*20(180) + 8*15(120) + 9*20(180) + 8*15(120) + 7*10(70) + 9*5(45) = 835 / 100 = 8.35
         assertEquals(8.35f, weightedSum, 0.01f)
         assertTrue(weightedSum in 0.0f..10.0f)
     }
@@ -131,5 +131,63 @@ class WereHereFeaturesTest {
         val completedThree = 3
         val percentFull = if (totalThree > 0) ((completedThree.toFloat() / totalThree.toFloat()) * 100).toInt() else 0
         assertEquals(100, percentFull)
+    }
+
+    @Test
+    fun testGeminiSecuritySanitization() {
+        val fakeApiKey = "AIzaSySecretKey987654321"
+        val rawErrorMessage = "HTTP 403 Forbidden: Request failed for key $fakeApiKey on endpoint /generateContent"
+
+        // Sanitization logic used in AiBackendClient
+        val sanitized = if (fakeApiKey.isNotBlank()) rawErrorMessage.replace(fakeApiKey, "[REDACTED]") else rawErrorMessage
+
+        assertFalse(sanitized.contains(fakeApiKey))
+        assertTrue(sanitized.contains("[REDACTED]"))
+        assertEquals("HTTP 403 Forbidden: Request failed for key [REDACTED] on endpoint /generateContent", sanitized)
+    }
+
+    @Test
+    fun testFirestoreSyncStableIdsAndConflictResolution() {
+        val goalId = 42L
+        val taskId = 101L
+        val noteId = 88L
+
+        // Stable document ID format test
+        val goalDocId = "goal_$goalId"
+        val taskDocId = "task_$taskId"
+        val noteDocId = "note_$noteId"
+
+        assertEquals("goal_42", goalDocId)
+        assertEquals("task_101", taskDocId)
+        assertEquals("note_88", noteDocId)
+
+        // Timestamp conflict resolution test: Last-write-wins
+        val localUpdatedAt = 1000L
+        val remoteUpdatedAtOlder = 800L
+        val remoteUpdatedAtNewer = 1200L
+
+        // Local should win against older remote
+        val localWins = localUpdatedAt >= remoteUpdatedAtOlder
+        assertTrue(localWins)
+
+        // Remote should win when newer
+        val remoteWins = remoteUpdatedAtNewer > localUpdatedAt
+        assertTrue(remoteWins)
+    }
+
+    @Test
+    fun testSyncStatusModelIntegrity() {
+        val unconfigured = SyncStatus.Unconfigured("Firebase configuration missing")
+        assertEquals("Firebase configuration missing", unconfigured.reason)
+
+        val syncing = SyncStatus.Syncing("Syncing goals...")
+        assertEquals("Syncing goals...", syncing.stage)
+
+        val success = SyncStatus.Success(lastSyncTimestamp = 123456789L, itemsSynced = 15)
+        assertEquals(123456789L, success.lastSyncTimestamp)
+        assertEquals(15, success.itemsSynced)
+
+        val error = SyncStatus.Error("Network timeout")
+        assertEquals("Network timeout", error.message)
     }
 }

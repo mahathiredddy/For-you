@@ -319,6 +319,7 @@ fun SettingsScreen(
                         text = "Development Gemini API Key (Optional):",
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold)
                     )
+                    var isKeyVisible by remember { mutableStateOf(false) }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -333,7 +334,18 @@ fun SettingsScreen(
                             placeholder = { Text("Enter AI Studio API key...") },
                             modifier = Modifier.weight(1f),
                             shape = RoundedCornerShape(10.dp),
-                            singleLine = true
+                            singleLine = true,
+                            visualTransformation = if (isKeyVisible) androidx.compose.ui.text.input.VisualTransformation.None else androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                            trailingIcon = {
+                                IconButton(onClick = { isKeyVisible = !isKeyVisible }) {
+                                    Icon(
+                                        imageVector = if (isKeyVisible) Icons.Default.Lock else Icons.Default.Key,
+                                        contentDescription = if (isKeyVisible) "Hide key" else "Show key",
+                                        modifier = Modifier.size(18.dp),
+                                        tint = if (isKeyVisible) AmberGoldPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
                         )
                         Button(
                             onClick = {

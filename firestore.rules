@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Zero-trust user isolation: authenticated users may ONLY read/write their own personal data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      match /{allSubcollections=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // Explicit deny for any global or unauthenticated document access
+    match /{document=**} {
+      allow read, write: false;
+    }
+  }
+}

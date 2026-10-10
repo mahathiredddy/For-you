@@ -37,6 +37,9 @@ interface GoalDao {
     @Query("SELECT * FROM goals ORDER BY updatedAt DESC")
     fun getAllGoals(): Flow<List<GoalEntity>>
 
+    @Query("SELECT * FROM goals ORDER BY updatedAt DESC")
+    suspend fun getAllGoalsOnce(): List<GoalEntity>
+
     @Query("SELECT * FROM goals WHERE status = 'ACTIVE' ORDER BY updatedAt DESC LIMIT 1")
     fun getActiveGoal(): Flow<GoalEntity?>
 
@@ -130,6 +133,9 @@ interface CheckInDao {
     @Query("SELECT * FROM daily_check_ins ORDER BY timestamp DESC")
     fun getAllCheckIns(): Flow<List<DailyCheckInEntity>>
 
+    @Query("SELECT * FROM daily_check_ins ORDER BY timestamp DESC")
+    suspend fun getAllCheckInsOnce(): List<DailyCheckInEntity>
+
     @Query("SELECT * FROM daily_check_ins ORDER BY timestamp DESC LIMIT 7")
     suspend fun getRecentCheckInsOnce(): List<DailyCheckInEntity>
 
@@ -162,6 +168,9 @@ interface MemoryDao {
 interface NoteDao {
     @Query("SELECT * FROM notes ORDER BY isPinned DESC, updatedAt DESC")
     fun getAllNotes(): Flow<List<NoteEntity>>
+
+    @Query("SELECT * FROM notes ORDER BY isPinned DESC, updatedAt DESC")
+    suspend fun getAllNotesOnce(): List<NoteEntity>
 
     @Query("SELECT * FROM notes WHERE goalId = :goalId ORDER BY isPinned DESC, updatedAt DESC")
     fun getNotesForGoal(goalId: Long): Flow<List<NoteEntity>>
