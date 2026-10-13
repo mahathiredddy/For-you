@@ -553,6 +553,80 @@ fun SettingsScreen(
             }
         }
 
+        // Notifications & Execution Reminders Card
+        val context = androidx.compose.ui.platform.LocalContext.current
+        var notificationFeedback by remember { mutableStateOf<String?>(null) }
+        val permissionLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
+            contract = androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted ->
+                notificationFeedback = if (isGranted) "Notifications enabled" else "Notification permission denied in system settings"
+            }
+        )
+
+        Card(
+            shape = RoundedCornerShape(18.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.25f)),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(
+                    text = "EXECUTION REMINDERS & NOTIFICATIONS",
+                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp),
+                    color = SkySecondary
+                )
+                Text(
+                    text = "Daily morning action prompt and evening reflection reminder keep your execution rhythm steady without distraction.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                        Button(
+                            onClick = {
+                                permissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant, contentColor = MaterialTheme.colorScheme.onSurface),
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Request Permission", style = MaterialTheme.typography.labelSmall)
+                        }
+                    }
+
+                    Button(
+                        onClick = {
+                            com.example.util.NotificationHelper.showReminderNotification(
+                                context = context,
+                                channelId = com.example.util.NotificationHelper.CHANNEL_DAILY_PLAN,
+                                notificationId = 101,
+                                title = "WE'RE HERE: Your Next Move",
+                                message = "Momentum begins with one focused action. Check Today's plan."
+                            )
+                            notificationFeedback = "Test notification dispatched"
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = AmberGoldPrimary, contentColor = Color(0xFF0F172A)),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Send Test Alert", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelSmall)
+                    }
+                }
+
+                if (notificationFeedback != null) {
+                    Text(
+                        text = notificationFeedback ?: "",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = EmeraldTertiary
+                    )
+                }
+            }
+        }
+
         // Privacy & Future Cloud Integrations Card
         Card(
             shape = RoundedCornerShape(18.dp),

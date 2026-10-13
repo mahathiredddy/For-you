@@ -31,12 +31,15 @@ import com.example.ui.screens.home.HomeScreen
 import com.example.ui.screens.more.BusinessScreen
 import com.example.ui.screens.more.ExploreScreen
 import com.example.ui.screens.more.HackathonScreen
+import com.example.ui.screens.more.ImLostScreen
 import com.example.ui.screens.more.LearningHubScreen
 import com.example.ui.screens.more.MemoryScreen
 import com.example.ui.screens.more.MoreScreen
 import com.example.ui.screens.more.NotesScreen
 import com.example.ui.screens.more.ProgressReviewScreen
+import com.example.ui.screens.more.ProjectsScreen
 import com.example.ui.screens.more.SettingsScreen
+import com.example.ui.screens.more.WealthScreen
 import com.example.ui.screens.onboarding.OnboardingScreen
 import com.example.ui.screens.roadmap.RoadmapScreen
 import com.example.ui.screens.today.TodayScreen
@@ -273,10 +276,39 @@ fun MainApp(
                             onBack = { currentScreen = Screen.More }
                         )
 
+                        Screen.Projects -> ProjectsScreen(
+                            activeGoal = activeGoal,
+                            tasks = goalTasks,
+                            onBack = { currentScreen = Screen.More }
+                        )
+
                         Screen.Business -> BusinessScreen(
                             plans = businessPlans,
                             onSavePlan = { plan -> viewModel.saveBusinessPlan(plan) },
                             onDeletePlan = { plan -> viewModel.deleteBusinessPlan(plan) },
+                            onBack = { currentScreen = Screen.More }
+                        )
+
+                        Screen.Wealth -> WealthScreen(
+                            onBack = { currentScreen = Screen.More }
+                        )
+
+                        Screen.ImLost -> ImLostScreen(
+                            onAdoptGoal = { title, desc, cat, firstAction ->
+                                viewModel.createGoal(
+                                    title = title,
+                                    description = desc,
+                                    category = cat,
+                                    desiredOutcome = "Complete $title",
+                                    deadline = "6 months",
+                                    motivation = "Direction finder strategic alignment: $firstAction",
+                                    hoursPerWeek = 21f,
+                                    budget = "₹0",
+                                    constraints = "Focus on initial step"
+                                ) {
+                                    currentScreen = Screen.Today
+                                }
+                            },
                             onBack = { currentScreen = Screen.More }
                         )
 

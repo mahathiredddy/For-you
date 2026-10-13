@@ -21,11 +21,14 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector?
     // Secondary Destinations Accessible from More or Details
     object LearningHub : Screen("learning_hub", "Learning Hub")
     object Notes : Screen("notes", "Notes")
+    object Projects : Screen("projects", "Projects")
     object Progress : Screen("progress", "Progress & Reviews")
     object Hackathon : Screen("hackathon", "Hackathon Intelligence")
     object Business : Screen("business", "Business Intelligence")
-    object Memory : Screen("memory", "Personal Memory")
+    object Wealth : Screen("wealth", "Wealth Mode")
     object Explore : Screen("explore", "Resource Discovery")
+    object Memory : Screen("memory", "Personal Memory")
+    object ImLost : Screen("im_lost", "I'm Lost")
     object Auth : Screen("auth", "Account & Cloud Sync")
     object Settings : Screen("settings", "Settings")
 

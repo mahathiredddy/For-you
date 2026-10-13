@@ -104,6 +104,14 @@ fun MoreScreen(
         )
 
         MoreHubItem(
+            title = "Projects",
+            description = "Track hands-on deliverables linked to goals, skills, and daily execution.",
+            icon = Icons.Default.Description,
+            iconTint = SkySecondary,
+            onClick = { onNavigateToDestination(Screen.Projects) }
+        )
+
+        MoreHubItem(
             title = "Progress & Weekly Reviews",
             description = "Comprehensive retrospectives, consistency streaks, and weekly calibration.",
             icon = Icons.Default.Timeline,
@@ -135,10 +143,26 @@ fun MoreScreen(
         )
 
         MoreHubItem(
+            title = "Wealth Mode",
+            description = "Three acceleration engines, income targeting, and capital preservation.",
+            icon = Icons.Default.Business,
+            iconTint = EmeraldTertiary,
+            onClick = { onNavigateToDestination(Screen.Wealth) }
+        )
+
+        MoreHubItem(
+            title = "Direction Finder: \"I'm Lost\"",
+            description = "Strategic calibration questionnaire and three comparative concrete paths.",
+            icon = Icons.Default.AutoAwesome,
+            iconTint = AmberGoldPrimary,
+            onClick = { onNavigateToDestination(Screen.ImLost) }
+        )
+
+        MoreHubItem(
             title = "Resource Discovery Engine",
             description = "Curated hackathons, courses, tools, grants, and datasets with verification status.",
-            icon = androidx.compose.material.icons.Icons.Default.AutoAwesome,
-            iconTint = EmeraldTertiary,
+            icon = Icons.Default.AutoAwesome,
+            iconTint = SkySecondary,
             onClick = { onNavigateToDestination(Screen.Explore) }
         )
 
